@@ -14,16 +14,174 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      active_sessions: {
+        Row: {
+          created_at: string | null
+          expires_at: string
+          fingerprint_visitor_id: string | null
+          id: string
+          ip_address: unknown | null
+          ip_location: Json | null
+          issued_at: string | null
+          last_accessed: string | null
+          precise_location: Json | null
+          session_id: string | null
+          status: Database["public"]["Enums"]["session_status"] | null
+          token: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at: string
+          fingerprint_visitor_id?: string | null
+          id?: string
+          ip_address?: unknown | null
+          ip_location?: Json | null
+          issued_at?: string | null
+          last_accessed?: string | null
+          precise_location?: Json | null
+          session_id?: string | null
+          status?: Database["public"]["Enums"]["session_status"] | null
+          token?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string
+          fingerprint_visitor_id?: string | null
+          id?: string
+          ip_address?: unknown | null
+          ip_location?: Json | null
+          issued_at?: string | null
+          last_accessed?: string | null
+          precise_location?: Json | null
+          session_id?: string | null
+          status?: Database["public"]["Enums"]["session_status"] | null
+          token?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "active_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pending_verifications: {
+        Row: {
+          auth_flow_type: Database["public"]["Enums"]["auth_flow_type"]
+          created_at: string | null
+          current_step: Database["public"]["Enums"]["verification_step"]
+          expected_otp: string | null
+          expires_at: string | null
+          fingerprint_data_at_credentials: Json | null
+          fingerprint_data_at_otp_request: Json | null
+          id: string
+          ip_address_at_credentials: unknown | null
+          ip_address_at_otp_request: unknown | null
+          phone_number: string
+          precise_location_at_credentials: Json | null
+          precise_location_at_otp_request: Json | null
+          user_id: string | null
+          username: string | null
+          verification_token: string | null
+        }
+        Insert: {
+          auth_flow_type: Database["public"]["Enums"]["auth_flow_type"]
+          created_at?: string | null
+          current_step: Database["public"]["Enums"]["verification_step"]
+          expected_otp?: string | null
+          expires_at?: string | null
+          fingerprint_data_at_credentials?: Json | null
+          fingerprint_data_at_otp_request?: Json | null
+          id?: string
+          ip_address_at_credentials?: unknown | null
+          ip_address_at_otp_request?: unknown | null
+          phone_number: string
+          precise_location_at_credentials?: Json | null
+          precise_location_at_otp_request?: Json | null
+          user_id?: string | null
+          username?: string | null
+          verification_token?: string | null
+        }
+        Update: {
+          auth_flow_type?: Database["public"]["Enums"]["auth_flow_type"]
+          created_at?: string | null
+          current_step?: Database["public"]["Enums"]["verification_step"]
+          expected_otp?: string | null
+          expires_at?: string | null
+          fingerprint_data_at_credentials?: Json | null
+          fingerprint_data_at_otp_request?: Json | null
+          id?: string
+          ip_address_at_credentials?: unknown | null
+          ip_address_at_otp_request?: unknown | null
+          phone_number?: string
+          precise_location_at_credentials?: Json | null
+          precise_location_at_otp_request?: Json | null
+          user_id?: string | null
+          username?: string | null
+          verification_token?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pending_verifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string | null
+          enrolled_face_template: string | null
+          id: string
+          phone_number: string
+          trusted_visitor_ids: string[] | null
+          updated_at: string | null
+          user_id: string | null
+          username: string
+        }
+        Insert: {
+          created_at?: string | null
+          enrolled_face_template?: string | null
+          id?: string
+          phone_number: string
+          trusted_visitor_ids?: string[] | null
+          updated_at?: string | null
+          user_id?: string | null
+          username: string
+        }
+        Update: {
+          created_at?: string | null
+          enrolled_face_template?: string | null
+          id?: string
+          phone_number?: string
+          trusted_visitor_ids?: string[] | null
+          updated_at?: string | null
+          user_id?: string | null
+          username?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      clean_expired_verifications: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
-      [_ in never]: never
+      auth_flow_type: "login" | "signup"
+      session_status: "active" | "revoked"
+      verification_step: "credentials" | "signupDetails" | "otp" | "face"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +308,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      auth_flow_type: ["login", "signup"],
+      session_status: ["active", "revoked"],
+      verification_step: ["credentials", "signupDetails", "otp", "face"],
+    },
   },
 } as const
